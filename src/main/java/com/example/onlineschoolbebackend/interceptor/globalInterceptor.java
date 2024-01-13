@@ -28,7 +28,7 @@ public class globalInterceptor  implements WebMvcConfigurer {
                 .excludePathPatterns(excludePathPatterns); // 排除;
 
 //        System.out.println("------------------------------");
-//        System.out.println(StpUtil.getPermissionList("teZh3MbA_user"));
+//        System.out.println(StpUtil.getPermissionList("teZh3MbA_user"));  阿达
 
 
 //        SaManager.getLog().debug("----- 请求path={}  提交token={}", SaHolder.getRequest().getRequestPath(), StpUtil.getTokenValue());
