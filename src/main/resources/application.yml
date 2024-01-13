@@ -1,0 +1,59 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/learning?serverTimezone=GMT%2B8&characterEncoding = utf-8
+    username: root
+    password: 123456
+    #驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # redis 缓存
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 1200
+  thymeleaf:
+    cache: false
+
+  # devtools热部署
+  devtools:
+    restart:
+      enabled: true   # 开启热部署
+      additional-paths: src/main/java   # 重启目录
+      exclude:
+  freemarker:
+    cache: true    # 页面不加载缓存，修改即时生效
+
+  jpa:
+    database: MySQL
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true  #日记中显示SQL语句
+    hibernate:
+      ddl-auto: update #自动更新 update如果没有表则创建表，对象发生变化就会更新表，数据不会丢失
+
+mybatis-plus:
+  configuration:
+    # 日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    cache-enabled: true # 开启二级缓存
+
+
+# Sa-Token 配置 (文档: https://sa-token.cc) #
+sa-token:
+  token-name: satoken # token 名称（同时也是 cookie 名称）
+  timeout: 2592000 # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  active-timeout: -1  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  is-concurrent: false  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-share: true  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  token-style: uuid  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  is-log: true  # 是否输出操作日志
+
