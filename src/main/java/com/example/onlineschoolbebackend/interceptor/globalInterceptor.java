@@ -1,10 +1,6 @@
 package com.example.onlineschoolbebackend.interceptor;
 
-import cn.dev33.satoken.SaManager;
-import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.interceptor.SaInterceptor;
-import cn.dev33.satoken.router.SaRouter;
-import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,7 +24,7 @@ public class globalInterceptor  implements WebMvcConfigurer {
                 .excludePathPatterns(excludePathPatterns); // 排除;
 
 //        System.out.println("------------------------------");
-//        System.out.println(StpUtil.getPermissionList("teZh3MbA_user"));  阿达
+//        System.out.println(StpUtil.getPermissionList("teZh3MbA_user"));
 
 
 //        SaManager.getLog().debug("----- 请求path={}  提交token={}", SaHolder.getRequest().getRequestPath(), StpUtil.getTokenValue());

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -22,7 +23,10 @@ import java.time.Duration;
  * redis的配置文件，template对映序列化规则，以及混村有效时间的设置
  * 定义RedisTemplate的bean交给spring管理，这里为了能将对象直接存取到redis中，进行了一些序列化的操作
  */
+@Configuration
 public class RedisConfig {
+
+
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
@@ -57,7 +61,6 @@ public class RedisConfig {
 
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
-
     }
 
 }

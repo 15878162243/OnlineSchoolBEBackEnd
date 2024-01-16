@@ -5,10 +5,8 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.onlineschoolbebackend.entity.User;
-import com.example.onlineschoolbebackend.mapper.UserMapper;
 import com.example.onlineschoolbebackend.service.UserService;
 import com.example.onlineschoolbebackend.utils.SecretUtil;
-import com.example.onlineschoolbebackend.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +34,6 @@ public class LoginController {
         if(user1 != null){
             // 登录StpUtil会话，参数填写要登录的账号id,该方法利用了Cookie自动注入的特性，省略了手写返回token。
             StpUtil.login(user1.getId());
-            StpUtil.getPermissionList(user1.getId()); // 获取权限
-            StpUtil.getRoleList(user1.getId()); // 获取角色
             Map<String, Object> data = new HashMap<>();
             data.put("data",user1);
             data.put("token",StpUtil.getTokenInfo());
@@ -59,24 +55,6 @@ public class LoginController {
     @GetMapping("isLogin")
     public SaResult isLogin() {
         return SaResult.data(StpUtil.isLogin());
-    }
-
-    // 查询token信息
-    @GetMapping("tokenInfo")
-    public SaResult tokenInfo() {
-        return SaResult.data(StpUtil.getTokenInfo());
-    }
-
-    // 获取用户的所有权限
-    @PostMapping("getPermissionList")
-    public SaResult getPermissionList(@RequestBody Object id) {
-        return SaResult.data(StpUtil.getPermissionList(id));
-    }
-
-    // 获取用户的角色
-    @PostMapping("getRoleList")
-    public SaResult getRoleList(@RequestBody Object id) {
-        return SaResult.data(StpUtil.getRoleList(id));
     }
 
 }

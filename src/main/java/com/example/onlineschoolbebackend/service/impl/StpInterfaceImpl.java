@@ -65,7 +65,6 @@ public class StpInterfaceImpl implements StpInterface {
         for (int i=0;i<list.size();i++){
             list1.add(list.get(i).getRname());
         }
-        System.out.println(list1);
         return list1;
     }
 

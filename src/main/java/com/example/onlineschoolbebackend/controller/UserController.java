@@ -11,9 +11,12 @@ import com.example.onlineschoolbebackend.entity.User;
 import com.example.onlineschoolbebackend.mapper.UserMapper;
 import com.example.onlineschoolbebackend.result.JsonResult;
 import com.example.onlineschoolbebackend.service.UserService;
+import com.example.onlineschoolbebackend.utils.MybatisRedisCache;
 import com.example.onlineschoolbebackend.utils.UuidUtils;
 import com.example.onlineschoolbebackend.utils.SecretUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -35,7 +38,6 @@ public class UserController {
     // 普通用户注册
     @PostMapping("register/addUser")
     public SaResult addUser(@RequestBody User user){
-
         // 查询该账号是否也存在。
         QueryWrapper<User> userSearch = new QueryWrapper<>();
         userSearch.eq("account",user.getAccount());
@@ -98,7 +100,6 @@ public class UserController {
     public SaResult deleteUser(@RequestBody User user){
         if(user.getId() != null){
             boolean deleteUserState = userService.removeById(user.getId());
-            System.out.println(deleteUserState);
             return deleteUserState ? SaResult.ok("删除成功") : SaResult.error("删除失败！");
         }else{
             return SaResult.error("请传输要删除的用户ID！");
@@ -114,6 +115,7 @@ public class UserController {
         user.setAccount(null);
         user.setPassword(null);
         user.setRid(null);
+
         int updateUserState = userMapper.update(user,updateWrapper);
         return updateUserState == 1 ? SaResult.ok("更新成功") : SaResult.error("更新失败！");
     }
@@ -126,20 +128,38 @@ public class UserController {
         return SaResult.data(userList);
     }
 
-    @RequestMapping("getPermission")
-    public SaResult getPermission(@RequestBody String id) {
-        // 查询权限信息 ，如果当前会话未登录，会返回一个空集合
-        List<String> permissionList = StpUtil.getPermissionList(id);
-        System.out.println("当前登录账号拥有的所有权限：" + permissionList);
+    // 查询token信息
+    @GetMapping("tokenInfo")
+    public SaResult tokenInfo() {
+        return SaResult.data(StpUtil.getTokenInfo());
+    }
 
-        // 查询角色信息 ，如果当前会话未登录，会返回一个空集合
-        List<String> roleList = StpUtil.getRoleList();
-        System.out.println("当前登录账号拥有的所有角色：" + roleList);
+    // 获取用户的所有权限
+    @PostMapping("getPermissionList")
+    public SaResult getPermissionList(@RequestBody Object id) {
+        return SaResult.data(StpUtil.getPermissionList(id));
+    }
+
+    // 获取用户的角色
+    @PostMapping("getRoleList")
+    public SaResult getRoleList(@RequestBody Object id) {
+        return SaResult.data(StpUtil.getRoleList(id));
+    }
+
+    @RequestMapping("getPermission")
+    public SaResult getPermission(@RequestBody Object id) {
+//        // 查询权限信息 ，如果当前会话未登录，会返回一个空集合
+//        List<String> permissionList = StpUtil.getPermissionList(id);
+//        System.out.println("当前登录账号拥有的所有权限：" + permissionList);
+//
+//        // 查询角色信息 ，如果当前会话未登录，会返回一个空集合
+//        List<String> roleList = StpUtil.getRoleList(id);
+//        System.out.println("当前登录账号拥有的所有角色：" + roleList);
 
         // 返回给前端
         return SaResult.ok()
-                .set("roleList", roleList)
-                .set("permissionList", permissionList);
+                .set("roleList", StpUtil.getRoleList(id))
+                .set("permissionList", StpUtil.getPermissionList(id));
     }
 
 
